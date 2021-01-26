@@ -9,6 +9,7 @@ https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/resources/
 https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/guides/service_principal_client_secret
 */
 locals {
+  packertemplate = "./packer/centos-azure.pkr.hcl"
   packerfile = "./packer-template.pkr.hcl"
 }
 
@@ -75,7 +76,7 @@ resource "azurerm_storage_account" "builder_storage" {
 
 resource "local_file" "packer_template" {
   filename = local.packerfile
-  content = templatefile("packer/ubuntu-azure.hcl", {
+  content = templatefile(local.packertemplate, {
     subscription_id = var.subscription_id,
     client_id = var.client_id,
     client_secret = var.client_secret,

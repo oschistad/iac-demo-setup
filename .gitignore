@@ -1,3 +1,4 @@
 .terraform.d
 .terraform.d/*
 .idea
+*.tfvars

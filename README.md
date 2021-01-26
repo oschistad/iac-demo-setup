@@ -6,10 +6,14 @@ Basic principles:
 - Fully automated change management
 
 We want to use CICD to create the infrastructure underlying our applications. 
-We want to manage this infrastructure according to modern development principles: 
-- Code reviews
-- Automated testing
+We want to manage this infrastructure using a modern development process: 
+
+- Change management through 
+    - Code reviews 
+    - Automated testing
+- Track changes using commit messages and blame
 - Automated delivery
+
 
 
 # Tool stack

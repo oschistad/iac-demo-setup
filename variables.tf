@@ -10,3 +10,7 @@ variable "client_secret" {
 variable "tenant_id" {
   default = ""
 }
+variable "location" {
+//  default = "Norway East"
+  default = "West Europe"
+}

@@ -8,6 +8,10 @@ https://docs.microsoft.com/en-us/azure/virtual-machines/linux/image-builder
 https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/resources/shared_image
 https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/guides/service_principal_client_secret
 */
+locals {
+  packerfile = "./packer-template.pkr.hcl"
+}
+
 terraform {
   required_providers {
     azurerm = {
@@ -40,7 +44,7 @@ provider "azurerm" {
 
 resource "azurerm_resource_group" "builder"{
 
-  location = "Norway East"
+  location = var.location
   name = "builder"
 }
 
@@ -61,3 +65,38 @@ resource "azurerm_resource_group" "builder"{
 //
 //  # ... See vars.tf for the other parameters you must define for the nomad-cluster module
 //}
+resource "azurerm_storage_account" "builder_storage" {
+  account_replication_type = "LRS"
+  account_tier = "Standard"
+  location = azurerm_resource_group.builder.location
+  name = "buildersg"
+  resource_group_name = azurerm_resource_group.builder.name
+}
+
+resource "local_file" "packer_template" {
+  filename = local.packerfile
+  content = templatefile("packer/ubuntu-azure.hcl", {
+    subscription_id = var.subscription_id,
+    client_id = var.client_id,
+    client_secret = var.client_secret,
+    tenant_id = var.tenant_id,
+    managed_image_resource_group_name = azurerm_resource_group.builder.name
+    managed_image_name = "nomad-image",
+    location = var.location
+    storage_account = azurerm_storage_account.builder_storage.name
+  } )
+}
+resource "null_resource" "run_packer" {
+  depends_on = [
+    azurerm_storage_account.builder_storage,
+    azurerm_resource_group.builder,
+    local_file.packer_template
+  ]
+  provisioner "local-exec" {
+    command = "packer build ${local_file.packer_template.filename}"
+
+  }
+  triggers = {
+    packerfile = sha256(local_file.packer_template.content)
+  }
+}

@@ -6,7 +6,7 @@ https://www.packer.io/docs/builders/azure/arm
 https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs
 https://docs.microsoft.com/en-us/azure/virtual-machines/linux/image-builder
 https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/resources/shared_image
-
+https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/guides/service_principal_client_secret
 */
 # Configure the Microsoft Azure Provider
 provider "azurerm" {

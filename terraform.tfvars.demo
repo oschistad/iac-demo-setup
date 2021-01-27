@@ -1,0 +1,9 @@
+// Secrets used by the infrastructure providers.
+// Rename this file to terraform.tfvars
+// Azure assumes a Client Secret but could also be a Client Certificate.
+subscription_id = "Azure Subscription ID here"
+client_id = "Azure Client ID here"
+tenant_id = "Azure Tenant ID here"
+client_secret = "Azure Client Secret here"
+tfe_token = "TFE Organization or User token here"
+github_oauth_token  = "GitHub OAuth2 token here"

@@ -24,3 +24,15 @@ We want to manage this infrastructure using a modern development process:
 - Azure Subscription
 - AzureRM provider for terraform
 - Hashicorp Nomad
+
+# Provisioning flow
+```mermaid
+graph TD
+  0[Admin] -->|Create terraform.tfvars| A
+  A[Setup Repo] -->|Create| B(TFE Workspace: Main)
+  A -->|Seed config| B
+  B -->|Create| C(TFE Workspace: Infrastructure)
+  B -->|Seed config| C
+  B -->|Create| D(TFE Workspace: Service)
+  B -->|Seed config| D
+```

@@ -25,7 +25,8 @@ locals {
     "tenant_id" = { "value" = var.tenant_id, "sensitive" = true  }
     "tfe_token" = { "value" = var.tfe_token, "sensitive" = true  }
     "github_oauth_token" = { "value" = var.github_oauth_token, "sensitive" = true  }
-    "tfe_orgname" = { "value" = var.tfe_orgname, "sensitive" = true  }
+    "github_oauth_token_id" = { "value" = tfe_oauth_client.github_vcs.oauth_token_id, "sensitive" = false  }
+    "tfe_orgname" = { "value" = var.tfe_orgname, "sensitive" = false  }
   }
 }
 variable "masterws_repo" {

@@ -18,6 +18,9 @@ terraform {
     azurerm = {
       version = "=2.40.0"
     }
+    tfe = {
+      version = "~> 0.24.0"
+    }
   }
 }
 # Configure the Microsoft Azure Provider

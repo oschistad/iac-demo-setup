@@ -9,8 +9,11 @@ https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/resources/
 https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/guides/service_principal_client_secret
 */
 locals {
-  packertemplate = "./packer/centos-azure.pkr.hcl"
-  packerfile = "./packer-template.pkr.hcl"
+  packer_base_template = "./packer/centos-azure.pkr.hcl"
+  packer_base_file = "./packer-template.pkr.hcl"
+  packer_nomad_template = "./packer/centos-azure-nomad.pkr.hcl"
+  packer_nomad_file = "./packer-template-nomad.pkr.hcl"
+
 }
 
 terraform {
@@ -77,30 +80,46 @@ resource "azurerm_storage_account" "builder_storage" {
   resource_group_name = azurerm_resource_group.builder.name
 }
 
-resource "local_file" "packer_template" {
-  filename = local.packerfile
-  content = templatefile(local.packertemplate, {
+resource "local_file" "packer_base_template" {
+  filename = local.packer_base_file
+  content = templatefile(local.packer_base_template, {
+    subscription_id = var.subscription_id,
+    client_id = var.client_id,
+    client_secret = var.client_secret,
+    tenant_id = var.tenant_id,
+    managed_image_resource_group_name = azurerm_resource_group.builder.name
+    managed_image_name = "base-image",
+    location = var.location
+    storage_account = azurerm_storage_account.builder_storage.name
+  } )
+}
+
+resource "local_file" "packer_nomad_template" {
+  filename = local.packer_nomad_file
+  content = templatefile(local.packer_nomad_template, {
     subscription_id = var.subscription_id,
     client_id = var.client_id,
     client_secret = var.client_secret,
     tenant_id = var.tenant_id,
     managed_image_resource_group_name = azurerm_resource_group.builder.name
     managed_image_name = "nomad-image",
+    custom_managed_image_name = "base-image"
     location = var.location
     storage_account = azurerm_storage_account.builder_storage.name
   } )
 }
+
 resource "null_resource" "run_packer" {
   depends_on = [
     azurerm_storage_account.builder_storage,
     azurerm_resource_group.builder,
-    local_file.packer_template
+    local_file.packer_base_template
   ]
   provisioner "local-exec" {
-    command = "packer build ${local_file.packer_template.filename}"
+    command = "packer build ${local_file.packer_base_template.filename}"
 
   }
   triggers = {
-    packerfile = sha256(local_file.packer_template.content)
+    packerfile = sha256(local_file.packer_base_template.content)
   }
 }

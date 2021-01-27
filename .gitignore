@@ -2,3 +2,6 @@
 .terraform.d/*
 .idea
 *.tfvars
+**/terraform.tfstate
+**/terraform.tfstate*
+**/.terraform.*

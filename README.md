@@ -1,4 +1,13 @@
-# Infrastructure as code
+# Setup IaC demo
+This repository is "step zero" of the IaC demo, and needs to be run once.
+
+The scripts and terraform code here will take care of seeding the initial facts and secrets required to enable Terraform Cloud to perform configuration and provisioning against itself and the Azure subscription provided.
+
+## Instuctions
+TODO
+
+
+#  About the IaC demo
 
 Basic principles:
 - Use code to create and manage infrastructure

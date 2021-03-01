@@ -4,7 +4,18 @@ This repository is "step zero" of the IaC demo, and needs to be run once.
 The scripts and terraform code here will take care of seeding the initial facts and secrets required to enable Terraform Cloud to perform configuration and provisioning against itself and the Azure subscription provided.
 
 ## Instuctions
-TODO
+The included terraform.tfvars demplate contains all the variables used in the demo. This file is intentionally excluded from git - many of the variables contain secrets that you probably do not want to accidentally commit to a shared repo.
+
+```
+subscription_id = "Azure Subscription ID here"
+client_id = "Azure Client ID here"
+tenant_id = "Azure Tenant ID here"
+client_secret = "Azure Client Secret here"
+tfe_token = "TFE Organization or User token here"
+github_oauth_token  = "GitHub OAuth2 token here"
+```
+
+Included in the repo is also a small helper script which uses the 'az' shell to create a client secret for Terraform to use as bearer token.
 
 
 #  About the IaC demo
